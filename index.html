@@ -110,7 +110,9 @@ input[type=range]{width:100%;accent-color:var(--blue);height:24px}
 .res-body{padding:16px 20px 18px;display:grid;gap:14px 28px;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);grid-template-areas:"h h" "big viz" "chg chg" "foot foot";align-items:center}
 .res-h{grid-area:h} .big{grid-area:big} .viz{grid-area:viz} #changes{grid-area:chg} .res-foot{grid-area:foot}
 @media (max-width:900px){.res-body{grid-template-columns:minmax(0,1fr);grid-template-areas:"h" "big" "viz" "chg" "foot"}}
-.res-h{font-size:1rem;font-weight:700;color:var(--muted)}
+.res-h{display:grid;gap:2px}
+.res-h h2{font-size:1.15rem;color:var(--navy)}
+.res-sub{font-size:.9rem;color:var(--muted)}
 .big{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
 @media (max-width:440px){.big{grid-template-columns:minmax(0,1fr)}}
 .stat{display:grid;gap:2px;padding:12px 14px;border:1px solid var(--line);border-radius:var(--r);min-width:0;container-type:inline-size}
@@ -140,11 +142,19 @@ input[type=range]{width:100%;accent-color:var(--blue);height:24px}
 .btn{background:var(--surface);border:2px solid var(--navy);border-radius:var(--r);padding:9px 16px;font-weight:700;font-size:.95rem;cursor:pointer;color:var(--navy)}
 .btn:hover{background:var(--navy);color:#fff}
 .btn:disabled{color:var(--faint);border-color:var(--line);background:var(--surface);cursor:default}
-.agg{display:grid;gap:6px}
-.agg-row{display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px;font-size:.92rem}
-.step-h input.cls-input{width:96px;padding:6px 10px;font-size:1.15rem;font-weight:700;color:var(--navy)}
-.step-compact{padding-block:10px}
-.agg-row b{font-variant-numeric:tabular-nums}
+.explore .step-h h2{font-size:1.15rem}
+.opt{font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--blue);border:1px solid var(--blue-tint);border-radius:var(--r);padding:2px 8px}
+.ex-grid{display:flex;flex-wrap:wrap;gap:12px 28px;align-items:end}
+.ex-in{width:190px}
+.explore input.cls-input{font-size:1.15rem;font-weight:700;color:var(--navy)}
+.ex-out{display:grid;gap:4px;padding-left:14px;border-left:3px solid var(--blue);min-width:0}
+.ex-out .k{font-size:.8rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}
+.ex-vals{display:flex;flex-wrap:wrap;gap:4px 24px;font-size:.95rem}
+.ex-vals b{font-size:1.3rem;font-weight:700;color:var(--navy);font-variant-numeric:tabular-nums;margin-left:4px}
+.ctx-det summary{padding:6px 0;font-size:.95rem}
+.ctx-det summary:hover{background:none;color:var(--blue)}
+.ctx-body{display:grid;gap:8px;padding:2px 0 4px 26px;font-size:.92rem;max-width:90ch}
+.ctx-body ul{margin:0;padding-left:18px;display:grid;gap:3px}
 .note{font-size:.8rem;color:var(--muted)}
 
 /* collapsed sections */
@@ -197,13 +207,8 @@ tfoot td{font-weight:700;border-bottom:0;border-top:2px solid var(--navy)}
   <div class="main">
     <!-- GUIDED STEPS -->
     <div class="panel" id="inputs">
-      <section class="step step-compact" aria-labelledby="s0">
-        <div class="step-h"><span class="step-n">1</span><h2 id="s0"><label for="cls">Residents per class</label></h2>
-          <input type="number" id="cls" class="cls-input" min="1" max="60" step="1" value="10">
-        </div>
-      </section>
       <section class="step" aria-labelledby="s1">
-        <div class="step-h"><span class="step-n">2</span><h2 id="s1">Where is your program?</h2></div>
+        <div class="step-h"><span class="step-n">1</span><h2 id="s1">Where is your program?</h2></div>
         <div class="where">
         <div class="where-row">
           <div class="field">
@@ -224,7 +229,7 @@ tfoot td{font-weight:700;border-bottom:0;border-top:2px solid var(--navy)}
       </section>
 
       <section class="step" aria-labelledby="s2">
-        <div class="step-h"><span class="step-n">3</span><h2 id="s2">Choose case volume</h2></div>
+        <div class="step-h"><span class="step-n">2</span><h2 id="s2">Choose case volume</h2></div>
         <div class="seg" role="group" aria-label="Case volume">
           <button type="button" data-mode="min" aria-pressed="false">ACGME Minimum</button>
           <button type="button" data-mode="avg" aria-pressed="true">Academic Average</button>
@@ -238,7 +243,7 @@ tfoot td{font-weight:700;border-bottom:0;border-top:2px solid var(--navy)}
     <section class="panel results" id="results" aria-live="polite" aria-labelledby="resH">
       <div class="scenario" id="scenario">Arizona · Academic Average · Poster Payer Mix</div>
       <div class="res-body">
-        <h2 class="res-h" id="resH">Modeled professional revenue per resident</h2>
+        <div class="res-h"><h2 id="resH">Modeled professional revenue per resident</h2><p class="res-sub">Based on modeled cumulative case exposure during residency.</p></div>
         <div class="big">
           <div class="stat">
             <span class="k">Medicare</span>
@@ -271,7 +276,7 @@ tfoot td{font-weight:700;border-bottom:0;border-top:2px solid var(--navy)}
     <!-- PAYER MIX (secondary) -->
     <div class="panel" id="payer">
       <section class="step" aria-labelledby="s3">
-        <div class="step-h"><span class="step-n">4</span><h2 id="s3">Payer mix</h2>
+        <div class="step-h"><span class="step-n">3</span><h2 id="s3">Payer mix</h2>
           <span class="right">
             <button type="button" class="linkbtn" id="toggleCalc" aria-controls="blendEx" aria-expanded="false">Show calculation</button>
             <button type="button" class="linkbtn" id="togglePayer" aria-controls="custom" aria-expanded="false">Customize payer mix</button>
@@ -291,6 +296,38 @@ tfoot td{font-weight:700;border-bottom:0;border-top:2px solid var(--navy)}
         </div>
       </section>
     </div>
+
+    <!-- OPTIONAL PROGRAM-LEVEL EXTRAPOLATION -->
+    <section class="panel explore" id="explore" aria-labelledby="exH">
+      <div class="step">
+        <div class="step-h"><h2 id="exH">Explore your program</h2><span class="opt">Optional</span></div>
+        <div class="ex-grid">
+          <div class="field ex-in">
+            <label for="cls">Residents per class</label>
+            <input type="number" id="cls" class="cls-input" min="1" max="60" step="1" value="10">
+          </div>
+          <div class="ex-out">
+            <span class="k">Modeled aggregate associated with resident case exposure</span>
+            <div class="ex-vals"><span>Medicare <b id="aggM"></b></span><span>Blended payer mix <b id="aggB"></b></span></div>
+          </div>
+        </div>
+        <p class="note">Calculated as the modeled per-resident estimate × residents per class. This represents modeled professional billing associated with resident case exposure and does not represent net revenue or overall program financial impact.</p>
+        <details class="ctx-det">
+          <summary>Putting this estimate in context</summary>
+          <div class="ctx-body">
+            <p>Evaluating the overall financial impact of a residency program would also require institution-specific factors, including:</p>
+            <ul>
+              <li>Resident salary and benefits</li>
+              <li>Faculty supervision and teaching costs</li>
+              <li>Program director/core faculty protected time and administrative costs</li>
+              <li>GME funding and other institutional support</li>
+              <li>Clinical activity not captured by this case-based model</li>
+            </ul>
+            <p>These factors are outside the scope of the current model and are not subtracted from the estimates shown above.</p>
+          </div>
+        </details>
+      </div>
+    </section>
   </div>
 
   <!-- COLLAPSED DETAIL -->
@@ -318,19 +355,6 @@ tfoot td{font-weight:700;border-bottom:0;border-top:2px solid var(--navy)}
         </div>
         <p class="note">* A single representative procedure was assigned to the pediatric &lt;12 years, intracerebral, and life-threatening pathology categories. † Bypass cardiac procedures were not consistently reported in public case logs and were therefore excluded from the average academic case volume, consistent with the poster. Program-specific values may be entered if available.</p>
         <p class="note">Using the poster assumptions (Arizona; 50% commercial, 30% Medicare, 20% Medicaid), estimated revenue was $112,230 at ACGME minimum case volumes (Medicare) and $265,865 (Medicare) and $625,656 (blended) at average academic case volumes. In the default scenario, these totals are displayed as reported on the poster. Category values are rounded individually and may not sum exactly to the totals.</p>
-      </div>
-    </details>
-    <details id="addDetails">
-      <summary>Additional modeling</summary>
-      <div class="dbody">
-        <div class="agg">
-          <span class="eyebrow">Modeled aggregate across class size</span>
-          <div class="agg-row">
-            <span>Residents per class <b id="aggN"></b></span>
-            <span>Medicare <b id="aggM"></b></span><span>Blended <b id="aggB"></b></span>
-          </div>
-          <span class="note">Modeled aggregate = per-resident estimate × residents per class (entered above). This does not represent incremental institutional revenue. Professional billing only.</span>
-        </div>
       </div>
     </details>
     <details>
@@ -561,7 +585,7 @@ function calc(changed){
   $("tMin").textContent = nMin.toLocaleString(); $("tAvg").textContent = nAvg.toLocaleString(); $("tYou").textContent = nYou.toLocaleString();
   $("tYM").textContent = usd(yM); $("tYB").textContent = usd(yB);
   setMoney($("yM"), yM); setMoney($("yB"), yB);
-  $("aggM").textContent = usd(Math.round(yM)*cls); $("aggB").textContent = usd(Math.round(yB)*cls); $("aggN").textContent = cls;
+  $("aggM").textContent = usd(Math.round(yM)*cls); $("aggB").textContent = usd(Math.round(yB)*cls);
 
   // comparison: ACGME-minimum Medicare vs selected-volume Medicare vs selected-volume blended
   const max = Math.max(minM, yM, yB, 1);
